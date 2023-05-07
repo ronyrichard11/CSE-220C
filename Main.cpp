@@ -48,8 +48,8 @@ int main(){
              << "1. Display Account Information\n"
              << "2. Deposit\n"
              << "3. Withdraw\n"
-             << "4. Add Account\n"
-             << "5. Find Account by ID\n"
+             << "4. Find Account by ID\n"
+             << "5. Add Account\n"
              << "6. Quit\n";
 
         
@@ -108,7 +108,24 @@ int main(){
                 }
                 break;
             
-            case 4: 
+            case 4:
+                // Display Account information
+                cout << "You chose Option 4\n\n";
+                int display_id;
+                cout << "Enter Account ID: ";
+                cin >> display_id;
+                it = find_if(accounts.begin(), accounts.end(), [&](BankAccount& account) {
+                    return account.matchesAccountID(display_id);
+                });
+                if (it == accounts.end()) {
+                    cout << "Account not found." << endl;
+                }
+                else {
+                    it->printAccountInfo();
+                } 
+                break;
+
+            case 5: 
                 // Create Another Bank Account
                 int id_num = rand() % 99999 + 10000;
 
@@ -120,7 +137,7 @@ int main(){
                 BankAccount myAccount(id_num, name, balance);
                 accounts.push_back(myAccount);
                 break;
-                                        
+                            
             }
         
     } while (choice != 6);
