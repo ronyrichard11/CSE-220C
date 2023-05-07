@@ -110,6 +110,7 @@ int main(){
             
             case 4: 
                 // Create Another Bank Account
+                int id_num = rand() % 99999 + 10000;
 
                 cout << "Enter Account Name: ";
                 cin >> name;
@@ -118,7 +119,8 @@ int main(){
 
                 BankAccount myAccount(id_num, name, balance);
                 accounts.push_back(myAccount);
-
+                break;
+                                        
             }
         
     } while (choice != 6);
