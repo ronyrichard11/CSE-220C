@@ -14,16 +14,20 @@
 
 #include <iostream> // for cout, cin
 #include <string>   // for string
+#include <list>     // for list
+#include <algorithm>
 #include "Account.hpp"
 using namespace std;
 
 
 
 int main(){
-    int id_num = rand() % 99999 + 13427;
+
+    int id_num = rand() % 99999 + 10000;
     string name = "";
     float balance = 0.0f;
     int choice;
+    list<BankAccount> accounts;
 
     cout << "Enter Account Name: ";
     cin >> name;
@@ -31,17 +35,23 @@ int main(){
     cin >> balance;
 
     BankAccount myAccount(id_num, name, balance);
+    accounts.push_back(myAccount);
 
     float value;
 
+    auto it = accounts.end(); // Declare and initialize it here
+
     do {
         // Print the menu options
-        cout << "-------------------------------------\n";
-        cout << "Menu\n\n";
-        cout << "1. Display Account Information\n";
-        cout << "2. Deposit\n";
-        cout << "3. Withdraw\n";
-        cout << "4. Quit\n";
+        cout << "-------------------------------------\n"
+             << "Menu\n\n"
+             << "1. Display Account Information\n"
+             << "2. Deposit\n"
+             << "3. Withdraw\n"
+             << "4. Add Account\n"
+             << "5. Find Account by ID\n"
+             << "6. Quit\n";
+
         
         // Read user choice from input
         cout << "\nEnter your choice: ";
@@ -52,34 +62,66 @@ int main(){
             case 1:
                 // Display Account information
                 cout << "You chose Option 1\n\n";
-                myAccount.printAccountInfo();
+                for (auto account : accounts){
+                    account.printAccountInfo();
+                    cout << "\n";
+                }                
                 break;
+
             case 2:
-                // Deposit Money
+                // Deposit
                 cout << "You chose Option 2\n\n";
-                cout << "How much would you like to DEPOSIT? $";
-                cin >> value;
-                myAccount.deposit(value);
-                value = 0;
+                int deposit_id;
+                cout << "Enter Account ID: ";
+                cin >> deposit_id;
+                it = find_if(accounts.begin(), accounts.end(), [&](BankAccount& account) {
+                    return account.matchesAccountID(deposit_id);
+                });
+                if (it == accounts.end()) {
+                    cout << "Account not found." << endl;
+                } else {
+                    float deposit_amount;
+                    cout << "Enter deposit amount: $";
+                    cin >> deposit_amount;
+                    it->deposit(deposit_amount);
+                    cout << "Deposit successful." << endl;
+                }
                 break;
+
             case 3:
-                // Withdraw Money
+                // Withdraw
                 cout << "You chose Option 3\n\n";
-                cout << "How much would you like to WITHDRAW? $";
-                cin >> value;
-                myAccount.withdraw(value);
-                value = 0;
+                int withdraw_id;
+                cout << "Enter Account ID: ";
+                cin >> withdraw_id;
+                it = find_if(accounts.begin(), accounts.end(), [&](BankAccount& account) {
+                    return account.matchesAccountID(withdraw_id);
+                });
+                if (it == accounts.end()) {
+                    cout << "Account not found." << endl;
+                } else {
+                    float withdraw_amount;
+                    cout << "Enter withdrawal amount: $";
+                    cin >> withdraw_amount;
+                    it->withdraw(withdraw_amount);
+                    cout << "Withdrawal successful." << endl;
+                }
                 break;
-            case 4:
-                // Break
-                cout << "Goodbye!\n";
-                break;
-            default:
-                cout << "Invalid choice. Please try again.\n";
-                break;
-        }
+            
+            case 4: 
+                // Create Another Bank Account
+
+                cout << "Enter Account Name: ";
+                cin >> name;
+                cout << "What is the present Balance? $";
+                cin >> balance;
+
+                BankAccount myAccount(id_num, name, balance);
+                accounts.push_back(myAccount);
+
+            }
         
-    } while (choice != 4);
+    } while (choice != 6);
     
-    return 0;
+    return 0;   
 }

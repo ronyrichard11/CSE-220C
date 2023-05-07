@@ -4,6 +4,8 @@
 
 #include <iostream> // for cout, cin
 #include <string>   // for string
+#include <list>     // for list
+
 using namespace std;
 
 class BankAccount{
@@ -12,6 +14,7 @@ class BankAccount{
     int accountID;
     string accountName;
     float accountBalance;
+    list<BankAccount> accounts;
 
 
     public:
@@ -69,5 +72,9 @@ class BankAccount{
         cout << "Account Balance: $" << accountBalance << endl;
 
     };
+
+    bool matchesAccountID(int id) {
+    return accountID == id;
+    }
 
 };
