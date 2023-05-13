@@ -23,10 +23,11 @@ using namespace std;
 
 int main(){
 
-    int id_num = rand() % 99999 + 10000;
+    int id_num = rand() % 9999 + 10000;
     string name = "";
     float balance = 0.0f;
     int choice;
+    float total = 0.0f;
     list<BankAccount> accounts;
 
     cout << "Enter Account Name: ";
@@ -49,8 +50,11 @@ int main(){
              << "2. Deposit\n"
              << "3. Withdraw\n"
              << "4. Find Account by ID\n"
-             << "5. Add Account\n"
-             << "6. Quit\n";
+             << "5. Delete Account\n"
+             << "6. Total Balance\n"
+             << "7. Add Dividend\n"
+             << "8. Add Account\n"             
+             << "9. Quit\n";
 
         
         // Read user choice from input
@@ -65,9 +69,9 @@ int main(){
                 for (auto account : accounts){
                     account.printAccountInfo();
                     cout << "\n";
-                }                
+                }           
                 break;
-
+    
             case 2:
                 // Deposit
                 cout << "You chose Option 2\n\n";
@@ -126,8 +130,48 @@ int main(){
                 break;
 
             case 5: 
+                // Delete A Bank Account
+                int AccountToDelete;
+                cout << "Enter the Account ID for the Account you would like to Delete: ";
+                cin >> AccountToDelete;
+                it = find_if(accounts.begin(), accounts.end(), [&](BankAccount& account){
+                    return account.matchesAccountID(AccountToDelete);
+                });
+                if (it == accounts.end()){
+                    cout << "Account not found.\n";
+                }
+                else {
+                    it = accounts.erase(it);
+                }
+
+                break;
+
+            case 6:
+                // Total Balance
+                for (auto account : accounts){
+                    total = account.getAccountBalance();
+                }  
+                cout << total << "\n";
+
+            break;   
+            
+            case 7:
+                // Add Dividend to all accounts
+                float dividendPercentage;
+                cout << "Enter the percentage of the dividend: ";
+                cin >> dividendPercentage;
+
+                transform(accounts.begin(), accounts.end(), accounts.begin(), [&](BankAccount& account) {
+                    account *= (1 + dividendPercentage / 100.0);
+                    return account;
+                });
+
+                cout << "Dividend added to all accounts successfully." << endl;
+                break;
+
+            case 8:
                 // Create Another Bank Account
-                int id_num = rand() % 99999 + 10000;
+                int id_num = rand() % 9999 + 10000;
 
                 cout << "Enter Account Name: ";
                 cin >> name;
@@ -137,10 +181,9 @@ int main(){
                 BankAccount myAccount(id_num, name, balance);
                 accounts.push_back(myAccount);
                 break;
-                            
             }
         
-    } while (choice != 6);
+    } while (choice != 9);
     
     return 0;   
 }

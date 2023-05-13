@@ -77,4 +77,9 @@ class BankAccount{
     return accountID == id;
     }
 
+    BankAccount& operator*=(float percentage) {
+        accountBalance *= (1 + percentage / 100.0);
+        return *this;
+    }
+
 };
