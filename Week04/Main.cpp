@@ -149,7 +149,7 @@ int main(){
             case 6:
                 // Total Balance
                 for (auto account : accounts){
-                    total = account.getAccountBalance();
+                    total += account.getAccountBalance();
                 }  
                 cout << total << "\n";
 
@@ -162,7 +162,7 @@ int main(){
                 cin >> dividendPercentage;
 
                 transform(accounts.begin(), accounts.end(), accounts.begin(), [&](BankAccount& account) {
-                    account *= (1 + dividendPercentage / 100.0);
+                    account *= (dividendPercentage);
                     return account;
                 });
 
